@@ -1,15 +1,10 @@
 package com.bundletool.myapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.webkit.PermissionRequest;
 import android.webkit.SslErrorHandler;
@@ -19,24 +14,30 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class WebViewActivity2 extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+public class WebViewActivity3 extends AppCompatActivity {
 
     private WebView mWebView = null;
     private ValueCallback<Uri[]> mFilePathCallback = null;
     private int REQUEST_CODE_LOLIPOP = 1;  // 5.0以上版本
     private String mCameraPhotoPath = "";  // 拍照的图片路径
+    public static final int REQUEST_CODE = 5;
 
     private static final String[] PERMISSION = new String[]{
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview2);
-
+        checkPermission(this);
         mWebView = (WebView) findViewById(R.id.webView);
         showWebView();
     }
@@ -69,16 +70,39 @@ public class WebViewActivity2 extends AppCompatActivity {
         webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
 
-        mWebView.loadUrl("https://qixinweb.37.com/test1.html");
+
         setWebViewClient();
         setWebChromeClient();
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)//判断是否获得权限
-        {  ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 100);}//获取权限
-
+        mWebView.loadUrl("https://qixinweb.37.com/test1.html");
 //        showCustomWebChromeClient();
 
     }
 
+    public static boolean checkPermission(Activity activity){
+        if(isPermissionGranted(activity)) {
+            return true;
+        } else {
+            //如果没有设置过权限许可，则弹出系统的授权窗口
+            ActivityCompat.requestPermissions(activity,PERMISSION,REQUEST_CODE);
+            return false;
+        }
+    }
+
+    public static boolean isPermissionGranted(Activity activity){
+        /***
+         * checkPermission返回两个值
+         * 有权限: PackageManager.PERMISSION_GRANTED
+         * 无权限: PackageManager.PERMISSION_DENIED
+         */
+        for (String s : PERMISSION) {
+            int checkPermission = ContextCompat.checkSelfPermission(activity, s);
+
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private void setWebViewClient() {
         mWebView.setWebViewClient(new WebViewClient(){

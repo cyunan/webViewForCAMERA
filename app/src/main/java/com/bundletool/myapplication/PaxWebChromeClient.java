@@ -176,8 +176,9 @@ public class PaxWebChromeClient extends WebChromeClient {
                     }
                 }
 
-                if (dataString != null)
+                if (dataString != null) {
                     results = new Uri[]{Uri.parse(dataString)};
+                }
             }
         }
         uploadFiles.onReceiveValue(results);
