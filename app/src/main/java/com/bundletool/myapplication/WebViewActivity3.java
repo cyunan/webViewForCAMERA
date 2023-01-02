@@ -30,7 +30,7 @@ public class WebViewActivity3 extends AppCompatActivity {
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.RECORD_AUDIO,
+//            Manifest.permission.RECORD_AUDIO,
     };
 
     @Override
@@ -40,6 +40,8 @@ public class WebViewActivity3 extends AppCompatActivity {
         checkPermission(this);
         mWebView = (WebView) findViewById(R.id.webView);
         showWebView();
+        int a = 1;
+        int b = a;
     }
 
     private void showWebView() {
@@ -107,23 +109,24 @@ public class WebViewActivity3 extends AppCompatActivity {
     }
 
     private void setWebViewClient() {
-        mWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                super.onReceivedError(view, errorCode, description, failingUrl);
-                mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return super.shouldOverrideUrlLoading(view, url);
-            }
-        });
+//        mWebView.setWebViewClient(new WebViewClient(){
+//            @Override
+//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//                handler.proceed();
+//            }
+//
+//            @Override
+//            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+//                super.onReceivedError(view, errorCode, description, failingUrl);
+//                mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+//            }
+//
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                return super.shouldOverrideUrlLoading(view, url);
+//            }
+//        });
+        mWebView.setWebViewClient(new WebViewClient());
     }
 
     private void setWebChromeClient() {
