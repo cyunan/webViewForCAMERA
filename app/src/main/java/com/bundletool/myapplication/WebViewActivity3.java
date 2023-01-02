@@ -42,6 +42,7 @@ public class WebViewActivity3 extends AppCompatActivity {
         showWebView();
         int a = 1;
         int b = a;
+        ine c = b;
     }
 
     private void showWebView() {
