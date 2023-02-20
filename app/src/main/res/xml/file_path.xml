@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <root-path
+        name="root"
+        path="" />
+    //代表设备的根目录new File("/");
+
+    <files-path
+        name="files"
+        path="." />
+    //context.getFilesDir()
+
+    <cache-path
+        name="cache"
+        path="." />
+    //context.getCacheDir()
+
+    <external-path
+        name="external"
+        path="." />
+    //Environment.getExternalStorageDirectory()
+
+    <external-files-path
+        name="external_file_path"
+        path="." />
+    //ContextCompat.getExternalFilesDirs()
+
+    <external-cache-path
+        name="external_cache_path"
+        path="." />
+    //ContextCompat.getExternalCacheDirs()
+
+    <files-path path="Android/data/com.example.package.name/files/Pictures/OriPicture/" name="images" />
+    <external-path path="Android/data/com.example.package.name/files/Pictures/OriPicture/" name="images" />
+    <external-files-path path="files/Pictures/OriPicture" name="images"/>
+    <root-path path="" name="images"/>
+    <root-path path="" name="images"/>
+</paths>
+
