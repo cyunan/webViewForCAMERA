@@ -42,6 +42,7 @@
     <uses-permission android:name="android.webkit.PermissionRequest" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -53,13 +54,22 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".FileProviderActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:name=".WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.Splash"
+            android:screenOrientation="sensorLandscape">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/TestTheme">
+
+        </activity>
+        <activity
+            android:name=".FileProviderActivity"
+            android:exported="true" >
+
         </activity>
         <activity
             android:name=".WebViewActivity3"
@@ -69,19 +79,25 @@
             android:exported="true" />
         <activity
             android:name=".WebViewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true">
+            android:configChanges="keyboardHidden|navigation|orientation|screenSize"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_path"/>
-    </provider>
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
     </application>
 
 </manifest>

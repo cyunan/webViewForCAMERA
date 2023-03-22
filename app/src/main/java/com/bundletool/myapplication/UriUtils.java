@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import androidx.core.splashscreen.SplashScreen;
+
 /**
  * Created by fuh on 2017/5/4.
  * Email：unableApe@gmail.com
@@ -105,6 +107,7 @@ public class UriUtils {
         } finally {
             if (cursor != null)
                 cursor.close();
+
         }
         return null;
     }

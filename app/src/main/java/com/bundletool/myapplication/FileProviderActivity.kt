@@ -41,7 +41,7 @@ class FileProviderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_provider)
-        WebViewActivity3.checkPermission(this)
+//        WebViewActivity3.checkPermission(this)
         findViewById<Button>(R.id.btn_click).setOnClickListener {
 //            openCamera()
             openGallery()
@@ -191,6 +191,8 @@ class FileProviderActivity : AppCompatActivity() {
             //            intent.setAction(Intent.ACTION_PICK);
         }
         intent.type = "image/*";
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         startActivityForResult(intent, REQUEST_OPEN_GALLERY);
     }
 
