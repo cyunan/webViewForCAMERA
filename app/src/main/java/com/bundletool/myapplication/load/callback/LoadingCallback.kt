@@ -2,8 +2,7 @@ package com.bundletool.myapplication.load.callback
 
 import com.bundletool.myapplication.R
 
-
-class EmptyCallBack : BaseLoadCallBack(){
+class LoadingCallback : BaseLoadCallBack(){
     override fun onCreateView(): Int {
         return R.layout.webview_empty
     }
