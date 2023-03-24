@@ -4,6 +4,6 @@ import com.bundletool.myapplication.R
 
 class LoadingCallback : BaseLoadCallBack(){
     override fun onCreateView(): Int {
-        return R.layout.webview_empty
+        return R.layout.webview_loading
     }
 }

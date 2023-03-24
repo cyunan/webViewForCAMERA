@@ -6,13 +6,13 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.io.Serializable
 
-abstract class BaseLoadCallBack {
+abstract class BaseLoadCallBack: Serializable {
     private var rootView: View? = null
     private var context: Context? = null
     private var onReloadListener: OnReloadListener? = null
-    private var successViewVisible = false
-    var successCallback: Boolean = false
+    var successViewVisible: Boolean = false
     constructor()
     constructor(view: View, context: Context, onReloadListener: OnReloadListener?){
         rootView = view

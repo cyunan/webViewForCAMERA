@@ -26,7 +26,7 @@ class LoadService(
         loadLayout = LoadLayout(context, onReloadListener)
         //5. 将SuccessCallback的 rootView 添加到loadLayout布局中
         loadLayout?.setupSuccessLayout(SuccessCallback(oldContent, context, onReloadListener))
-        //6. 将 loadLayout添加到 需要替换的布局上
+        //6. 将 loadLayout添加到 需要替换的布局上(因为在 getTargetContext()的时候，父容器中的target已经移除了)
         targetContext.parentView.addView(loadLayout, targetContext.childIndex, oldLayoutParams)
         //7.初始化callback
         builder?.let { initCallback(it) }

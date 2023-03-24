@@ -3,11 +3,10 @@ package com.bundletool.myapplication.load
 import com.bundletool.myapplication.load.callback.BaseLoadCallBack
 
 class LoadServiceImpl {
-//    private lateinit var builder: Builder
     private var builder: Builder? = null
 
     companion object{
-        val instance: LoadServiceImpl by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED){LoadServiceImpl()}
+        val instance: LoadServiceImpl by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED){ LoadServiceImpl() }
     }
 
     fun register(target: Any?) = register(target, null)

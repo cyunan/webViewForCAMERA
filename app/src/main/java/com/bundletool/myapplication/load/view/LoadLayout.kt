@@ -1,6 +1,7 @@
 package com.bundletool.myapplication.load.view
 
 import android.content.Context
+import android.view.View
 import android.widget.FrameLayout
 import com.bundletool.myapplication.load.LoadUtil
 import com.bundletool.myapplication.load.callback.BaseLoadCallBack
@@ -27,8 +28,12 @@ class LoadLayout : FrameLayout{
     /**
      * 设置成功页面
      */
-    fun setupSuccessLayout(callBack: BaseLoadCallBack?){
-
+    fun setupSuccessLayout(callBack: BaseLoadCallBack){
+        addCallback(callBack)
+        val successView: View? = callBack.getRootView()
+        successView?.visibility = GONE
+        addView(successView)
+        curCallback = SuccessCallback::class.java
     }
 
     /**
@@ -45,7 +50,7 @@ class LoadLayout : FrameLayout{
     /**
      * 添加回调
      */
-    fun addCallback(callBack: BaseLoadCallBack){
+    private fun addCallback(callBack: BaseLoadCallBack){
         if (!callbacks.containsKey(callBack.javaClass)) {
             callbacks[callBack.javaClass] = callBack
         }
@@ -94,7 +99,7 @@ class LoadLayout : FrameLayout{
                 if (key == SuccessCallback::class.java) {
                     successCallback?.show()
                 } else {
-                    callbacks[key]?.let { successCallback?.showWithCallback(it.successCallback) }
+                    callbacks[key]?.let { successCallback?.showWithCallback(it.successViewVisible) }
                     val rootView = callbacks[key]?.getRootView()
                     addView(rootView)
                     callbacks[key]?.onAttach(context, rootView)
