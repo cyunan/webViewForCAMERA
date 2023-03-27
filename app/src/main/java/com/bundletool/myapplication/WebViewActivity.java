@@ -1,9 +1,15 @@
 package com.bundletool.myapplication;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.net.http.SslError;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,25 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 
 import com.bundletool.myapplication.base.BaseWebView;
 import com.bundletool.myapplication.base.WebViewCallBack;
 import com.bundletool.myapplication.load.LoadService;
 import com.bundletool.myapplication.load.LoadServiceImpl;
-import com.bundletool.myapplication.load.callback.EmptyCallBack;
 import com.bundletool.myapplication.load.callback.ErrorCallBack;
-import com.bundletool.myapplication.load.callback.BaseLoadCallBack;
 import com.bundletool.myapplication.load.callback.LoadingCallback;
-import com.bundletool.myapplication.load.callback.SuccessCallback;
+import com.bundletool.myapplication.push.NotificationReceiver;
 
 public class WebViewActivity extends Activity{
 
@@ -143,7 +143,85 @@ public class WebViewActivity extends Activity{
                 loadService.showCallback(ErrorCallBack.class);
             }
         });
+        initNotification();
     }
+
+    private void initNotification() {
+        int requestCode = (int) System.currentTimeMillis();
+        Intent broadcastIntent = new Intent(this, NotificationReceiver.class);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getBroadcast(this,
+                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        }else {
+            pendingIntent = PendingIntent.getBroadcast(this,
+                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // 如果该channel已经存在，则可以不用再次创建
+            NotificationChannel channel = new NotificationChannel("channel_id", "channel_name",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            //是否绕过请勿打扰模式
+            channel.canBypassDnd();
+            //闪光灯
+            channel.enableLights(true);
+            //锁屏显示通知
+            channel.setLockscreenVisibility(1);
+            //闪关灯的灯光颜色
+            channel.setLightColor(Color.RED);
+            //桌面launcher的消息角标
+            channel.canShowBadge();
+            //是否允许震动
+            channel.enableVibration(true);
+            //获取系统通知响铃声音的配置
+            channel.getAudioAttributes();
+            //获取通知取到组
+            channel.getGroup();
+            //设置可绕过  请勿打扰模式
+            channel.setBypassDnd(true);
+            //设置震动模式
+            channel.setVibrationPattern(new long[]{100, 100, 200});
+            //是否会有灯光
+            channel.shouldShowLights();
+            // 如果该channel已经存在，则可以不用再次创建
+            manager.createNotificationChannel(channel);
+        }
+        // 注意：此处channel_id必须是一个已存在的channel id；否则无法显示通知
+        Notification notification = new NotificationCompat.Builder(this, "channel_id")
+                .setContentIntent(pendingIntent)
+                .setContentTitle("Title").setContentText("This is content").setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round)).build();
+        manager.notify(requestCode, notification);
+
+//        Intent broadcastIntent = new Intent(this, ShowNotificationReceiver.class);
+//        PendingIntent pendingIntent;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            pendingIntent = PendingIntent.getBroadcast(this,
+//                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+//
+//        }else {
+//            pendingIntent = PendingIntent.getBroadcast(this,
+//                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        }
+//        Notification.Builder builder = new Notification.Builder(this);
+////        NotificationCompat.Builder builder = new NotificationCompat.Builder(iContext);
+//        builder.setContentTitle("messageTitle")
+//                .setContentText("messageBody")
+//                .setDefaults(Notification.DEFAULT_LIGHTS)
+////                .setTicker(messageBody)
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true)
+//                .setSmallIcon(android.R.drawable.ic_lock_idle_charging);
+//
+//        NotificationManager manager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+//        manager.notify(requestCode, builder.build());
+    }
+
 
     @Override
     protected void onDestroy() {
