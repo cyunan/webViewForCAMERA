@@ -3,6 +3,7 @@ package com.bundletool.myapplication.base
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.util.AttributeSet
 import android.util.Log
 import android.webkit.WebView
@@ -81,6 +82,17 @@ class BaseWebView @JvmOverloads constructor(
             }
             task.start()
         }
+    }
+
+    inner class BlankDetectionRunnable: Runnable{
+        override fun run() {
+            isDrawingCacheEnabled = true
+            val bmp = drawingCache
+            val matrix = Matrix()
+            matrix.setScale(0.2f, 0.2f)
+            val bmScaled = Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, matrix, true)
+        }
+
     }
 
 
