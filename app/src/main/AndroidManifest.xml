@@ -57,7 +57,7 @@
             android:name=".WelcomeActivity"
             android:exported="true"
             android:theme="@style/AppTheme.Splash"
-            android:screenOrientation="sensorLandscape">
+            >
 
         </activity>
         <activity

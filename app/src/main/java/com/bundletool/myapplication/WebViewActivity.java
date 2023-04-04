@@ -1,17 +1,20 @@
 package com.bundletool.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,6 +35,10 @@ import com.bundletool.myapplication.load.LoadServiceImpl;
 import com.bundletool.myapplication.load.callback.ErrorCallBack;
 import com.bundletool.myapplication.load.callback.LoadingCallback;
 import com.bundletool.myapplication.push.NotificationReceiver;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import kotlin.jvm.functions.Function1;
 
 public class WebViewActivity extends Activity{
 
@@ -48,67 +56,23 @@ public class WebViewActivity extends Activity{
         setContentView(R.layout.activity_web);
 //        setFullScreen(true);
 
-        path = "www.baidu.com";
+        path = "https://juejin.cn/?utm_source=gold_browser_extension";
+//        path = "http://baidu.com";
+//        path = "https://gabres.37games.com/platform/support.html?Isdblink=0&advertiser=global&androidid=aed54ec7eb7f8d6840f6333b97aef1eb&appLanguage=zh-CN&apps=1679894272633-6521975428286192471&battery=100&channelId=&country=CN&customUserId=8a4da0fa-223b-43fb-a5e5-00b12b3677cb&deepLinkURL=&devicePlate=android&gaid=675eeeba-c14b-4768-9a2a-1916a27e9c26&gameCode=ztmslg&gameId=191&gpid=675eeeba-c14b-4768-9a2a-1916a27e9c26&imei=&installTime=1679894268526&isFirst=0&isTrackEnabled=1&isVpnOn=0&jgPid=1&language=zh-CN&loginAccount=MVFN%3A1104903614&loginName=MVFN%3A1104903614&loginSign=02ae981ca62f6e82c90cd5c89d1a919438686f0ed2a3035daac77d7a29694e9c1bd7ab4f3dc2a0b4396fb1a36ffefc0d718072a661a42de1221424efdbd1d9daea89ebce16fa1204207f135748e45c99fa6e0c7159b1df0e5bdec9ce5fe64317&loginTimestamp=1680061101&loginToken=02ae981ca62f6e82c90cd5c89d1a919438686f0ed2a3035daac77d7a29694e9c1bd7ab4f3dc2a0b4396fb1a36ffefc0d718072a661a42de1221424efdbd1d9daea89ebce16fa1204207f135748e45c99fa6e0c7159b1df0e5bdec9ce5fe64317&loginUID=1104903614&mac=&netType=WIFI&osVersion=13&packageName=com.global.ztmslg&packageVersion=1&phoneModel=Pixel+4a&ptCode=global&publishPlatForm=&ratio=1080x2340&roleId=&roleLevel=&roleName=&sdkToken=globalztmslglink&sdkVersion=358&sdkVersionName=3.0.10&serverId=&sign=4dcebc7d7562a94ed84bf8eb085af229&skinBrand=37games&thirdPlatForm=mac&timeStamp=1680061106007&timeZone=GMT%2B08%3A00&ueAndroidId=5968c901051b201c&uid=1104903614&userId=1104903614&userMode=2&userName=1104903614&zone=zh-CN#/mylist";
 //        listener = new OrientationEventListener(this) {
 //            @Override
 //            public void onOrientationChanged(int orientation) {
-//                Log.i("lala","onOrientationChanged===>" + orientation);
-//                boolean isPortrait = PolyvScreenUtils.isPortrait(WebViewActivity.this);
-//                if ((orientation > -1 && orientation <= 10) || orientation >= 350 || (orientation <= 190 && orientation >= 170)) {
-//                    if (!isPortrait){
-//                        PolyvScreenUtils.setPortrait(WebViewActivity.this);
-//                    }
-//
-//                } else if ((orientation <= 100 && orientation >= 80) || (orientation <= 280 && orientation >= 260)) {
-//                    if (isPortrait){
-//                        PolyvScreenUtils.setLandscape(WebViewActivity.this);
-//                    }
-//                }
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 //            }
 //        };
 //        listener.enable();
-        listener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-            }
-        };
-        listener.enable();
         webView = findViewById(R.id.webView);
         clContent = findViewById(R.id.cl_content);
-//        webView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                return super.shouldOverrideUrlLoading(view, request);
-//            }
-//
-//            @Override
-//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//                super.onPageStarted(view, url, favicon);
-//            }
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-//            }
-//
-//            @Override
-//            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-//                super.onReceivedError(view, request, error);
-//                Log.e("webview", "onReceivedError");
-//            }
-//
-//            @Override
-//            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-//                super.onReceivedSslError(view, handler, error);
-//                Log.e("webview", "onReceivedSslError");
-//            }
-//        });
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
-        if (path.contains("baidu")){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        }
+//        if (path.contains("baidu")){
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//        }
         webView.loadUrl(path);
 
         // 1. 初始化builder，加载到LoadServiceImpl里面
@@ -120,11 +84,14 @@ public class WebViewActivity extends Activity{
 //                .commit();
         // 2. 初始化LoadService
         LoadService loadService = LoadServiceImpl.Companion.getInstance().register(clContent);
+
         webView.registerWebViewCallBack(new WebViewCallBack() {
             @Override
             public void pageStarted(@Nullable String url) {
                 Log.e("loadsir", "pageStarted");
                 loadService.showCallback(LoadingCallback.class);
+                webView.removeBlankMonitorRunnable();
+                webView.postBlankMonitorRunnable();
             }
 
             @Override
@@ -142,8 +109,25 @@ public class WebViewActivity extends Activity{
                 //设置失败页面
                 loadService.showCallback(ErrorCallBack.class);
             }
+        }, new BaseWebView.BlankMonitorCallback1() {
+            @Override
+            public void onBlank() {
+                Log.e("WebViewActivity", "发生白屏");
+                new AlertDialog.Builder(WebViewActivity.this)
+                        .setTitle("提示")
+                        .setMessage("检测到页面发生异常，是否重新加载？")
+                        .setPositiveButton("重新加载", (dialog, which) -> {
+                            dialog.dismiss();
+                            webView.reload();
+                        })
+                        .create()
+                        .show();
+
+            }
         });
-        initNotification();
+
+
+//        initNotification();
     }
 
     private void initNotification() {
@@ -196,30 +180,6 @@ public class WebViewActivity extends Activity{
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round)).build();
         manager.notify(requestCode, notification);
-
-//        Intent broadcastIntent = new Intent(this, ShowNotificationReceiver.class);
-//        PendingIntent pendingIntent;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            pendingIntent = PendingIntent.getBroadcast(this,
-//                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-//
-//        }else {
-//            pendingIntent = PendingIntent.getBroadcast(this,
-//                    requestCode, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        }
-//        Notification.Builder builder = new Notification.Builder(this);
-////        NotificationCompat.Builder builder = new NotificationCompat.Builder(iContext);
-//        builder.setContentTitle("messageTitle")
-//                .setContentText("messageBody")
-//                .setDefaults(Notification.DEFAULT_LIGHTS)
-////                .setTicker(messageBody)
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(true)
-//                .setSmallIcon(android.R.drawable.ic_lock_idle_charging);
-//
-//        NotificationManager manager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-//        manager.notify(requestCode, builder.build());
     }
 
 
@@ -307,28 +267,6 @@ public class WebViewActivity extends Activity{
                     WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
     }
-
-//    class IWebViewCallBack implements WebViewCallBack {
-//        private IWebViewCallBack mCallBack;
-//        IWebViewCallBack(IWebViewCallBack callBack){
-//            mCallBack = callBack;
-//        }
-//
-//        @Override
-//        public void pageStarted(@Nullable String url) {
-//
-//        }
-//
-//        @Override
-//        public void pageFinished(@Nullable String url) {
-//
-//        }
-//
-//        @Override
-//        public void onError() {
-//
-//        }
-//    }
 
 
 

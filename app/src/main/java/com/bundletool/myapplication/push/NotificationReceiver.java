@@ -11,7 +11,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i("TAG", "通知栏:我被点击啦！！！ ");
         Intent newIntent = new Intent("ACTION_OPEN_GAME_ACTIVITY");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        newIntent.addCategory("android.intent.category.DEFAULT");
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(newIntent);
 
     }

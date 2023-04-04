@@ -90,16 +90,19 @@ class LoadLayout : FrameLayout{
             removeViewAt(CALLBACK_CUSTOM_INDEX)
         }
 
-        //todo 没看懂
+        //3. 展示callback视图
         for (key in callbacks.keys) {
             if (key == mCallback) {
                 val successCallback: SuccessCallback? =
                     callbacks[SuccessCallback::class.java] as SuccessCallback?
 
                 if (key == SuccessCallback::class.java) {
+                    // 如果是成功的callback，就展示成功视图
                     successCallback?.show()
                 } else {
+                    // 如果是其他视图，先把成功视图 INVISIBLE
                     callbacks[key]?.let { successCallback?.showWithCallback(it.successViewVisible) }
+                    // 再把当前callback的的视图添加到根布局上
                     val rootView = callbacks[key]?.getRootView()
                     addView(rootView)
                     callbacks[key]?.onAttach(context, rootView)

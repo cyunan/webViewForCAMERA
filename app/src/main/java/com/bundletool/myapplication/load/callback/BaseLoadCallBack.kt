@@ -2,11 +2,7 @@ package com.bundletool.myapplication.load.callback
 
 import android.content.Context
 import android.view.View
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
-import java.io.Serializable
+import java.io.*
 
 abstract class BaseLoadCallBack: Serializable {
     private var rootView: View? = null
@@ -57,6 +53,13 @@ abstract class BaseLoadCallBack: Serializable {
      * 创建view
      */
     protected open fun onBuildView(context: Context?): View? = null
+
+    /**
+     * 如果返回 true，当附加回调视图时，successView 将可见
+     */
+    protected open fun getSuccessVisible(): Boolean {
+        return successViewVisible
+    }
 
     /**
      * 是否有刷新事件
