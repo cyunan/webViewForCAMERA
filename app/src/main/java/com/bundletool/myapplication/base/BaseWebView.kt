@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import android.webkit.WebView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -39,9 +40,14 @@ class BaseWebView @JvmOverloads constructor(
         override fun run() {
             val task = Thread {
                 // 根据宽高的 1/6 创建 bitmap
-                val dstWidth = measuredWidth / 6
-                val dstHeight = measuredHeight / 6
-                val snapshot = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888)
+//                val dstWidth = measuredWidth / 6
+//                val dstHeight = measuredHeight / 6
+                val dstWidth = measuredWidth
+                val dstHeight = measuredHeight
+                val bmScaled = Bitmap.createBitmap(dstWidth, dstHeight, Bitmap.Config.ARGB_8888)
+                val matrix = Matrix()
+                matrix.setScale(0.2f, 0.2f)
+                val snapshot = Bitmap.createBitmap(bmScaled, 0, 0, bmScaled.width, bmScaled.height, matrix, true)
                 // 绘制 view 到 bitmap
                 val canvas = Canvas(snapshot)
                 draw(canvas)
@@ -71,7 +77,7 @@ class BaseWebView @JvmOverloads constructor(
                 // 计算白色像素点占比 （计算其他颜色也一样）
                 val percentage: Float = whitePixelCount / pixelCount * 100
                 // 如果超过阈值 触发白屏提醒
-                if (percentage > 99) {
+                if (percentage > 95) {
                     post {
                         mBlankMonitorCallback?.invoke()
                         mBlankMonitorCallback1?.onBlank()
@@ -84,8 +90,10 @@ class BaseWebView @JvmOverloads constructor(
         }
     }
 
-    inner class BlankDetectionRunnable: Runnable{
+    inner class BlankDetectionRunnable(private val view: View): Runnable{
         override fun run() {
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+
             isDrawingCacheEnabled = true
             val bmp = drawingCache
             val matrix = Matrix()
